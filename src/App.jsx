@@ -66,7 +66,7 @@ export default function MyFun() {
             placeholder="Add New Task"
             className="input-field"
           />
-          <button className={`action-button ${isEditing !== null ? "edit" : "add"}`} onClick={addTask}>
+          <button className={`action-button  ${isEditing !== null ? "edit" : "add"}`}style={{backgroundColor:isEditing !== null ?  "orange":"green" }} onClick={addTask}>
             {isEditing !== null ? "Edit" : "Add"}
           </button>
         </div>
