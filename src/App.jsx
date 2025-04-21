@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import "./index.css";
 
-export default function MyFun() {
-
+export default function FuturisticTodo() {
   const getStoredData = (key) => {
     try {
       const data = localStorage.getItem(key);
@@ -11,10 +11,13 @@ export default function MyFun() {
       return []; 
     }
   };
+
   const [tasks, setTasks] = useState(() => getStoredData("Tasks"));
   const [completedTasks, setCompletedTasks] = useState(() => getStoredData("Completed"));
   const [input, setInput] = useState("");
   const [isEditing, setIsEditing] = useState(null);
+  const [isHovered, setIsHovered] = useState(null);
+
   useEffect(() => {
     localStorage.setItem("Tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -22,6 +25,7 @@ export default function MyFun() {
   useEffect(() => {
     localStorage.setItem("Completed", JSON.stringify(completedTasks));
   }, [completedTasks]);
+
   const addTask = () => {
     if (input.trim() !== "") {
       if (isEditing !== null) {
@@ -34,6 +38,12 @@ export default function MyFun() {
         setTasks([...tasks, input]);
       }
       setInput("");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      addTask();
     }
   };
 
@@ -51,68 +61,159 @@ export default function MyFun() {
     setCompletedTasks([...completedTasks, taskToMove]);
     setTasks(tasks.filter((_, i) => i !== index));
   };
-  
+
+  const moveBack = (index) => {
+    const taskToMove = completedTasks[index];
+    setTasks([...tasks, taskToMove]);
+    setCompletedTasks(completedTasks.filter((_, i) => i !== index));
+  };
 
   return (
-    <>
-
-      <nav className="navbar">
-        <h2 className="title">Todo List</h2>
-        <div className="input-container">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Add New Task"
-            className="input-field"
-          />
-          <button className={`action-button  ${isEditing !== null ? "edit" : "add"}`}style={{backgroundColor:isEditing !== null ?  "orange":"green" }} onClick={addTask}>
-            {isEditing !== null ? "Edit" : "Add"}
-          </button>
-        </div>
-      </nav>
-
-
-      <div className="main-container">
-
-        <div className="card pending-tasks">
-          <h3>Pending Tasks</h3>
+    <div className="app-container">
+      {/* Header */}
+      <header className="app-header">
+        <div className="header-container">
+          <h1 className="app-title">
+            <span className="title-wrapper">
+              TASK
+              <span className="title-accent">SYNC</span>
+              <span className="title-underline"></span>
+            </span>
+          </h1>
           
-          <ul>
-            {tasks.length === 0 ? (
-              <li>No pending tasks</li>
-            ) : (
-              tasks.map((task, index) => (
-                <li key={index} className="task-item">
-                  <input type="checkbox" onChange={() => completeTask(index)} />
-                  <span>{task}</span>
-                  <button className="edit-button" onClick={() => switchToEdit(index)}>
-                    Edit
-                  </button>
-                  <button className="remove-button" onClick={() => removeTask(index)}>
-                    Remove
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
+          <div className="input-wrapper">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Add New Task"
+              className="task-input"
+            />
+            <button 
+              onClick={addTask}
+              className={`action-button ${isEditing !== null ? "edit-mode" : ""}`}
+            >
+              {isEditing !== null ? "UPDATE" : "ADD"}
+            </button>
+          </div>
         </div>
+      </header>
 
+      {/* Main Content */}
+      <main className="app-main">
+        <div className="task-grid">
+          {/* Pending Tasks */}
+          <div className="task-container">
+            <div className="container-header">
+              <h2 className="container-title">
+                <span className="status-indicator pending"></span>
+                Pending Tasks
+                <span className="task-count">({tasks.length})</span>
+              </h2>
+            </div>
+            
+            <div className="container-content">
+              {tasks.length === 0 ? (
+                <div className="empty-state">
+                  <p>No pending tasks</p>
+                </div>
+              ) : (
+                <ul className="task-list">
+                  {tasks.map((task, index) => (
+                    <li 
+                      key={index} 
+                      className={`task-item ${isHovered === index ? "hovered" : ""}`}
+                      onMouseEnter={() => setIsHovered(index)}
+                      onMouseLeave={() => setIsHovered(null)}
+                    >
+                      <div className="task-content">
+                        <button 
+                          onClick={() => completeTask(index)}
+                          className="complete-button"
+                        >
+                          <span className="check-mark">✓</span>
+                        </button>
+                        <span className="task-text">{task}</span>
+                      </div>
+                      
+                      <div className="task-actions">
+                        <button 
+                          onClick={() => switchToEdit(index)}
+                          className="edit-button"
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={() => removeTask(index)}
+                          className="delete-button"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
 
-        <div className="card completed-tasks">
-          <h3>Completed Tasks<button className="clear" onClick={()=>setCompletedTasks([])}>Clear All</button></h3>
-          
-          <ul>
-            {completedTasks.length === 0 ? (
-              <li>No completed tasks</li>
-            ) : (
-              completedTasks.map((task, index) => (
-                <li key={index} className="completed-task">{task}</li>
-              ))
-            )}
-          </ul>
+          {/* Completed Tasks */}
+          <div className="task-container">
+            <div className="container-header">
+              <h2 className="container-title">
+                <span className="status-indicator completed"></span>
+                Completed Tasks
+                <span className="task-count">({completedTasks.length})</span>
+              </h2>
+              
+              {completedTasks.length > 0 && (
+                <button 
+                  onClick={() => setCompletedTasks([])}
+                  className="clear-button"
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
+            
+            <div className="container-content">
+              {completedTasks.length === 0 ? (
+                <div className="empty-state">
+                  <p>No completed tasks</p>
+                </div>
+              ) : (
+                <ul className="task-list">
+                  {completedTasks.map((task, index) => (
+                    <li key={index} className="task-item completed">
+                      <div className="task-content">
+                        <span className="complete-indicator">
+                          <span className="check-mark visible">✓</span>
+                        </span>
+                        <span className="task-text">{task}</span>
+                      </div>
+                      
+                      <button 
+                        onClick={() => moveBack(index)}
+                        className="restore-button"
+                      >
+                        Restore
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-    </>
+      </main>
+      
+      {/* Footer */}
+      <footer className="app-footer">
+        <div className="footer-content">
+          <p>TaskSync © {new Date().getFullYear()} | Futuristic Task Management</p>
+        </div>
+      </footer>
+    </div>
   );
 }

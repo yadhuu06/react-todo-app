@@ -1,91 +1,422 @@
+/* FuturisticTodo.css */
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-.body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
+body {
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #000;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Styles */
+.app-header {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #1a1a1a;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.title-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.title-accent {
+  color: #00FF40;
+}
+
+.title-underline {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #00FF40;
+  box-shadow: 0 0 10px #00FF40;
+}
+
+.input-wrapper {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #111;
+  border-radius: 8px;
+  padding: 0.25rem;
+  border: 1px solid #333;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.input-wrapper:focus-within {
+  border-color: #00FF40;
+  box-shadow: 0 0 15px rgba(0, 255, 64, 0.1);
+}
+
+.input-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(0, 255, 64, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  border-radius: 8px;
+  filter: blur(15px);
+}
+
+.input-wrapper:hover::after {
+  opacity: 1;
+}
+
+.task-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+.task-input::placeholder {
+  color: #555;
+}
+
+.action-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #00FF40;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.action-button:hover {
+  background-color: #00e639;
+  box-shadow: 0 0 12px rgba(0, 255, 64, 0.5);
+}
+
+.action-button.edit-mode {
+  background-color: #ffc107;
+}
+
+.action-button.edit-mode:hover {
+  background-color: #e6ac00;
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.5);
+}
+
+/* Main Content Styles */
+.app-main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  flex: 1;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.task-container {
+  background-color: #111;
+  border-radius: 8px;
+  border: 1px solid #222;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.task-container:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.container-header {
+  padding: 1rem;
+  border-bottom: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.status-indicator.pending {
+  background-color: #ffc107;
+}
+
+.status-indicator.completed {
+  background-color: #00FF40;
+}
+
+.task-count {
+  margin-left: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.container-content {
+  padding: 1rem;
+}
+
+.empty-state {
+  padding: 1.5rem 0;
+  text-align: center;
+  color: #555;
+}
+
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.task-item:hover {
+  border-color: rgba(0, 255, 64, 0.3);
+}
+
+.task-item.hovered {
+  background: linear-gradient(90deg, #1a1a1a, #222);
+}
+
+.task-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.complete-button {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #444;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.complete-button:hover {
+  border-color: #00FF40;
+}
+
+.check-mark {
+  color: #00FF40;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.complete-button:hover .check-mark {
+  opacity: 1;
+}
+
+.complete-indicator {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #00FF40;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 255, 64, 0.1);
+}
+
+.check-mark.visible {
+  opacity: 1;
+}
+
+.task-text {
+  color: #ddd;
+}
+
+.task-item.completed .task-text {
+  color:white;
+  
+}
+
+.task-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-button, .delete-button {
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-button {
+  color: #3498db;
+}
+
+.edit-button:hover {
+  color: #2980b9;
+}
+
+.delete-button {
+  color: #e74c3c;
+}
+
+.delete-button:hover {
+  color: #c0392b;
+}
+
+.restore-button {
+  padding: 0.25rem 0.5rem;
+  background-color: #222;
+  border: none;
+  border-radius: 4px;
+  color: #aaa;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.task-item.completed:hover .restore-button {
+  opacity: 1;
+}
+
+.restore-button:hover {
+  background-color: #333;
+  color: #ddd;
+}
+
+.clear-button {
+  padding: 0.25rem 0.75rem;
+  background-color: #222;
+  border: none;
+  border-radius: 4px;
+  color: #aaa;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-button:hover {
+  background-color: #333;
+  color: #ddd;
+}
+
+/* Footer Styles */
+.app-footer {
+  padding: 1.5rem 1rem;
+  border-top: 1px solid #222;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* Responsive Styles */
+@media (min-width: 768px) {
+  .header-container {
+    flex-direction: row;
   }
 
-  .navbar {
-    background-color: #007bff;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .app-title {
+    margin-bottom: 0;
+    text-align: left;
   }
-  
-  .input-container {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .input-field {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-  }
-  
 
-  .main-container {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px;
+  .input-wrapper {
+    max-width: 500px;
   }
- .title{
-    margin-left: 550px;
- } 
-  .card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 45%;
-  }
-  
 
-  .task-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px;
-    color: orange;
-    border-bottom: 1px solid #ddd;
+  .task-grid {
+    grid-template-columns: 1fr 1fr;
   }
-  
-  .completed-task {
-    
-    color:green;
-  }
-  
+}
 
-  .action-button, .edit-button, .remove-button {
-    cursor: pointer;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
+/* Glow Effects */
+@keyframes subtle-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 255, 64, 0.3);
   }
-  
-  .action-button {
-    background-color: green;
-    color: white;
+  50% {
+    box-shadow: 0 0 15px rgba(0, 255, 64, 0.5);
   }
-  
-  .edit-button {
-    background-color: rgb(19, 19, 242);
-    color: white;
+  100% {
+    box-shadow: 0 0 5px rgba(0, 255, 64, 0.3);
   }
-  
-  .remove-button {
-    background-color: red;
-    color: white;
+}
 
-  }
-  .clear{
-    color: rgb(232, 228, 228);
-    background-color:#007bff;
-    margin-left: 450px;
-    border-radius: 5px;
-    padding: 5px 7px;
-  }
+.task-container:hover {
+  animation: subtle-glow 2s infinite;
+}
